@@ -8,9 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ericorenan.workshopmongo.domain.Post;
+import com.ericorenan.workshopmongo.resources.util.URL;
 import com.ericorenan.workshopmongo.services.PostService;
 
 @RestController
@@ -21,7 +23,7 @@ public class PostResource {
     private PostService service;
 
     @GetMapping
-    public  ResponseEntity<List<Post>> findAll(){
+    public ResponseEntity<List<Post>> findAll() {
         List<Post> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
@@ -31,6 +33,15 @@ public class PostResource {
         Optional<Post> obj = service.findById(id);
 
         return ResponseEntity.ok().body(obj.get());
+    }
+
+    @RequestMapping(value = "/titlesearch")
+    @GetMapping
+    public ResponseEntity<List<Post>> findByTitle(@RequestParam(value ="text", defaultValue ="") String text ) {
+        text = URL.decodeParam(text);
+        List<Post> list = service.findByTitle(text);
+
+        return ResponseEntity.ok().body(list);
     }
 
 }
