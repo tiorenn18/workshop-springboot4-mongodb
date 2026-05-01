@@ -1,5 +1,6 @@
 package com.ericorenan.workshopmongo.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,11 +13,11 @@ import com.ericorenan.workshopmongo.services.exception.ObjectNotFoundException;
 
 @Service
 public class PostService {
-    
+
     @Autowired
     private PostRepository repository;
 
-    public List<Post> findAll(){
+    public List<Post> findAll() {
         return repository.findAll();
     }
 
@@ -31,5 +32,10 @@ public class PostService {
 
     public List<Post> findByTitle(String text){
         return repository.findByTitleContainingIgnoreCase(text);
+    }
+
+    public List<Post> fullSearch(String text, Date dateMin, Date dateMax){
+        dateMax = new Date(dateMax.getTime() + 24 * 60 * 60 * 1000 );
+        return repository.fullSearch(text, dateMin, dateMax);
     }
 }
